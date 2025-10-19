@@ -31,7 +31,7 @@ jobs:
           git rev-parse --short HEAD
           ls -la
 
-      - name: Run .github/ci-prerequisites.sh (simulated)
+            - name: Run .github/ci-prerequisites.sh (simulated)
         run: |
           if [ -f .github/ci-prerequisites.sh ]; then
             echo "Running .github/ci-prerequisites.sh via bash"
@@ -50,6 +50,7 @@ jobs:
           else
             echo "No ci/database-start.sh"
           fi
+
 
       - name: Run build
         run: npm run build
