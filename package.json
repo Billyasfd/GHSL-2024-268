@@ -1,0 +1,10 @@
+{
+  "name": "ppe-hibernate-lab",
+  "version": "0.0.0",
+  "scripts": {
+    "ci-prereq": "node -e \"console.log('run ci-prereq')\"",
+    "db-start": "node -e \"console.log('run db-start')\"",
+    "build": "node -e \"console.log('build step')\"",
+    "deploy": "node -e \"console.log('NORMAL DEPLOY: no secrets here')\""
+  }
+}

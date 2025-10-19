@@ -1,0 +1,59 @@
+name: Contributor Build (vulnerable-sim)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request_target:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  contributor:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rdbms: [h2]
+
+    steps:
+      - name: Checkout repository (trusted context)
+        uses: actions/checkout@v4
+        with:
+          # WARNING (simulated): check out the PR HEAD - DO NOT do this in production with secrets.
+          # For lab demonstration only; no secrets used in this repo.
+          ref: ${{ github.event.pull_request && format('refs/pull/{0}/head', github.event.pull_request.number) || github.ref }}
+          persist-credentials: false
+
+      - name: Show checked out commit
+        run: |
+          echo "Checked out commit:"
+          git rev-parse --short HEAD
+          ls -la
+
+      - name: Run .github/ci-prerequisites.sh (simulated)
+        run: |
+          if [ -f .github/ci-prerequisites.sh ]; then
+            echo "Running .github/ci-prerequisites.sh"
+            .github/ci-prerequisites.sh
+          else
+            echo "No .github/ci-prerequisites.sh"
+          fi
+
+      - name: Run ci/database-start.sh (simulated)
+        env:
+          RDBMS: ${{ matrix.rdbms }}
+        run: |
+          if [ -f ci/database-start.sh ]; then
+            echo "Running ci/database-start.sh"
+            ci/database-start.sh
+          else
+            echo "No ci/database-start.sh"
+          fi
+
+      - name: Run build
+        run: npm run build
+
+      - name: Confirm marker file
+        run: |
+          echo "job finished"
