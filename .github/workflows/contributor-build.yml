@@ -31,19 +31,25 @@ jobs:
           git rev-parse --short HEAD
           ls -la
 
-      - name: Make scripts executable and run
+      - name: Run .github/ci-prerequisites.sh (simulated)
+        run: |
+          if [ -f .github/ci-prerequisites.sh ]; then
+            echo "Running .github/ci-prerequisites.sh via bash"
+            bash .github/ci-prerequisites.sh
+          else
+            echo "No .github/ci-prerequisites.sh"
+          fi
+
+      - name: Run ci/database-start.sh (simulated)
         env:
           RDBMS: ${{ matrix.rdbms }}
         run: |
-          echo "Making scripts executable (if needed)"
-          chmod +x .github/ci-prerequisites.sh || true
-          chmod +x ci/database-start.sh || true
-
-          echo "Running .github/ci-prerequisites.sh"
-          .github/ci-prerequisites.sh || true
-
-          echo "Running ci/database-start.sh"
-          ci/database-start.sh || true
+          if [ -f ci/database-start.sh ]; then
+            echo "Running ci/database-start.sh via bash"
+            bash ci/database-start.sh
+          else
+            echo "No ci/database-start.sh"
+          fi
 
       - name: Run build
         run: npm run build
